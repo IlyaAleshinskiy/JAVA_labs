@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout('Добавить историю болезни', ~{::main})}">
+<main>
+    <h2>Добавить историю болезни</h2>
+    <form th:action="@{/record/save}" th:object="${record}" method="post">
+
+        <label>Питомец:</label>
+        <select th:field="*{pet.id}">
+            <option value="">-- Выберите --</option>
+            <option th:each="pet : ${pets}"
+                    th:value="${pet.id}"
+                    th:text="${pet.name + ' (' + (pet.owner?.firstName ?: 'без владельца') + ')'}">
+            </option>
+        </select>
+
+        <label>Диагноз:</label>
+        <input type="text" th:field="*{diagnosis}" />
+        <span th:if="${#fields.hasErrors('diagnosis')}" th:errors="*{diagnosis}" class="error"></span>
+
+        <label>Тип визита:</label>
+        <select th:field="*{visitType}">
+            <option value="routine">Плановый</option>
+            <option value="emergency">Экстренный</option>
+            <option value="surgery">Операция</option>
+        </select>
+
+        <label><input type="checkbox" th:field="*{requiresFollowUp}" /> Нужен повторный приём</label>
+        <label><input type="checkbox" th:field="*{medicationPrescribed}" /> Назначены лекарства</label>
+
+        <label>Специалисты (можно выбрать несколько):</label><br/>
+        <div th:each="spec : ${specialists}">
+            <label>
+                <input type="checkbox"
+                       th:value="${spec.id}"
+                       th:field="*{specialists}" />
+                <span th:text="${spec.firstName + ' ' + spec.lastName + ' (' + spec.specialization + ')'}"></span>
+            </label><br/>
+        </div>
+
+        <button type="submit">Создать запись</button>
+    </form>
+
+    <div th:if="${param.success}" class="success">История болезни успешно добавлена!</div>
+</main>
+</html>

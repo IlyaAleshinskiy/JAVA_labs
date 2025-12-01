@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout('Добавить питомца', ~{::main})}">
+<main>
+    <h2>Добавить питомца</h2>
+    <form th:action="@{/pet/save}" th:object="${pet}" method="post">
+        <label>Имя:</label>
+        <input type="text" th:field="*{name}" />
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></span>
+
+        <label>Владелец:</label>
+        <select th:field="*{owner.id}">
+            <option value="">-- Выберите --</option>
+            <option th:each="owner : ${owners}"
+                    th:value="${owner.id}"
+                    th:text="${owner.firstName + ' ' + owner.lastName}"></option>
+        </select>
+
+        <label>Вид:</label>
+        <select th:field="*{species}">
+            <option value="cat">Кошка</option>
+            <option value="dog">Собака</option>
+        </select>
+
+        <label>Пол:</label>
+        <input type="radio" th:field="*{gender}" value="male"/> Мужской
+        <input type="radio" th:field="*{gender}" value="female"/> Женский
+
+        <label><input type="checkbox" th:field="*{vaccinated}" /> Привит</label>
+
+        <label>Возраст:</label>
+        <input type="number" th:field="*{age}" min="0" max="50" />
+
+        <button type="submit">Сохранить</button>
+    </form>
+
+    <div th:if="${param.success}" class="success">
+        Питомец успешно добавлен!
+    </div>
+</main>
+</html>

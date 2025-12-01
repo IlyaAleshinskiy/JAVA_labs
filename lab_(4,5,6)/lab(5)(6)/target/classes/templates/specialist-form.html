@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout('Добавить специалиста', ~{::main})}">
+<main>
+    <h2>Добавить специалиста</h2>
+    <form th:action="@{/specialist/save}" th:object="${specialist}" method="post">
+        <label>Имя:</label>
+        <input type="text" th:field="*{firstName}" />
+        <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="error"></span>
+
+        <label>Фамилия:</label>
+        <input type="text" th:field="*{lastName}" />
+        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error"></span>
+
+        <label>Специализация:</label>
+        <select th:field="*{specialization}">
+            <option value="surgeon">Хирург</option>
+            <option value="therapist">Терапевт</option>
+            <option value="dentist">Стоматолог</option>
+            <option value="dermatologist">Дерматолог</option>
+        </select>
+
+        <label>Тип занятости:</label>
+        <input type="radio" th:field="*{employmentType}" value="full-time"/> Полная
+        <input type="radio" th:field="*{employmentType}" value="part-time"/> Частичная
+
+        <label><input type="checkbox" th:field="*{acceptsNewPatients}" /> Принимает новых пациентов</label>
+
+        <button type="submit">Сохранить</button>
+    </form>
+
+    <div th:if="${param.success}" class="success">Специалист успешно добавлен!</div>
+</main>
+</html>

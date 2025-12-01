@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout('Добавить владельца', ~{::main})}">
+<main>
+    <h2>Добавить владельца</h2>
+    <form th:action="@{/owner/save}" th:object="${owner}" method="post">
+        <label>Имя:</label>
+        <input type="text" th:field="*{firstName}" />
+        <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="error"></span>
+
+        <label>Фамилия:</label>
+        <input type="text" th:field="*{lastName}" />
+        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error"></span>
+
+        <label>Способ связи:</label>
+        <select th:field="*{contactPreference}">
+            <option value="email">Email</option>
+            <option value="phone">Телефон</option>
+            <option value="both">Оба</option>
+        </select>
+
+        <label>Пол:</label>
+        <input type="radio" th:field="*{gender}" value="male"/> Мужской
+        <input type="radio" th:field="*{gender}" value="female"/> Женский
+
+
+        <button type="submit">Сохранить</button>
+    </form>
+
+    <div th:if="${param.success}" class="success">Владелец успешно добавлен!</div>
+</main>
+</html>
